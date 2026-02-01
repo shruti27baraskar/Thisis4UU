@@ -100,37 +100,57 @@ button {
     opacity: 0;
   }
 }
-  .custom-language-switcher {
+  .language-menu {
   position: fixed;
-  top: 20px; /* distance from top */
-  right: 20px; /* distance from right */
-  background-color: #ff4081; /* pink-ish matching your hearts */
-  color: white;
-  border-radius: 25px;
-  padding: 10px 15px;
-  font-family: sans-serif;
-  font-weight: bold;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
   cursor: pointer;
+  font-family: sans-serif;
+}
+
+.globe {
+  font-size: 2em;
+  background: #ff4081;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 9999; /* stays on top */
   transition: transform 0.2s;
 }
 
-.custom-language-switcher:hover {
+.globe:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }
 
-/* Optional: hide default dropdown arrow and style options */
-.gtranslate_wrapper select {
-  background: transparent;
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  appearance: none;
-  padding: 5px;
+.language-options {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #ff66aa;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  text-align: center;
 }
+
+.language-options .lang {
+  padding: 8px 12px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.language-options .lang:hover {
+  background: #ff85c1;
+}
+
 
 </style>
 </head>
@@ -195,7 +215,15 @@ function createHeart() {
   }, 5000);
 }
 </script>
-<div class="gtranslate_wrapper custom-language-switcher"></div>
+<div class="language-menu">
+  <div class="globe">🌐</div>
+  <div class="language-options">
+    <div class="lang" data-lang="en">English</div>
+    <div class="lang" data-lang="hi">हिंदी</div>
+    <div class="lang" data-lang="mr">मराठी</div>
+  </div>
+</div>
+
 <script>
 window.gtranslateSettings = {
   "default_language":"en",
@@ -206,8 +234,38 @@ window.gtranslateSettings = {
 }
 </script>
 <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+<script>
+window.gtranslateSettings = {
+  "default_language":"en",
+  "languages":["en","mr","hi"],
+  "wrapper_selector":".gtranslate_wrapper"
+};
+
+// Toggle the options popup
+const globe = document.querySelector('.globe');
+const options = document.querySelector('.language-options');
+
+globe.addEventListener('click', () => {
+  options.style.display = options.style.display === 'block' ? 'none' : 'block';
+});
+
+// Handle language selection
+document.querySelectorAll('.language-options .lang').forEach(item => {
+  item.addEventListener('click', () => {
+    const lang = item.dataset.lang;
+    const frame = document.querySelector('iframe.goog-te-menu-frame');
+    if (frame) {
+      frame.contentWindow.document.querySelector(`.goog-te-menu2-item span:textEquals("${lang === 'en' ? 'English' : lang === 'hi' ? 'Hindi' : 'Marathi'}")`)?.click();
+    }
+    options.style.display = 'none';
+  });
+});
+</script>
+
 
 </body>
 </html>
+
 
 
