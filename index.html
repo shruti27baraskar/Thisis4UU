@@ -14,7 +14,7 @@ body {
   overflow: hidden;
 }
 
-/* ---------- COMMON ---------- */
+/* ---------- SCREENS ---------- */
 .screen {
   display: none;
   height: 100vh;
@@ -101,7 +101,6 @@ button {
   top: 20px;
   right: 20px;
   z-index: 9999;
-  font-family: sans-serif;
 }
 
 .globe {
@@ -122,37 +121,6 @@ button {
 .globe:hover {
   transform: scale(1.2);
 }
-
-.language-options {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 0;
-  background: #ff66aa;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  text-align: center;
-  animation: fadeIn 0.3s ease;
-}
-
-.language-options .lang {
-  padding: 8px 12px;
-  color: white;
-  font-weight: bold;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-
-.language-options .lang:hover {
-  background: #ff85c1;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 </style>
 </head>
 
@@ -171,19 +139,25 @@ button {
 
 <!-- SCREEN 2 -->
 <div class="screen" id="screen2">
-  <h1>Yeahhh! i'll be yours bubu 💖🥰</h1>
+  <h1>Yeahhh! I'll be yours bubu 💖🥰</h1>
   <div class="image second-img"></div>
 </div>
 
 <!-- LANGUAGE GLOBE -->
 <div class="language-menu">
   <div class="globe">🌐</div>
-  <div class="language-options">
-    <div class="lang" data-lang="en">English</div>
-    <div class="lang" data-lang="hi">हिंदी</div>
-    <div class="lang" data-lang="mr">मराठी</div>
-  </div>
+  <div class="gtranslate_wrapper" style="display:none;"></div>
 </div>
+
+<!-- GTranslate Widget -->
+<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+<script>
+window.gtranslateSettings = {
+  default_language: "en",
+  languages: ["en","mr","hi"],
+  wrapper_selector: ".gtranslate_wrapper"
+};
+</script>
 
 <script>
 // ---------------- HEARTS + SCREENS ----------------
@@ -219,42 +193,25 @@ function createHeart() {
 }
 
 // ---------------- LANGUAGE GLOBE ----------------
-// Toggle popup
 const globe = document.querySelector('.globe');
-const options = document.querySelector('.language-options');
+const gwrap = document.querySelector('.gtranslate_wrapper');
 
 globe.addEventListener('click', () => {
-  options.style.display = options.style.display === 'block' ? 'none' : 'block';
+  // show the actual GTranslate select dropdown
+  if (!gwrap.innerHTML.trim()) return; 
+  const select = gwrap.querySelector('select');
+  if (select) select.click(); // trigger dropdown
 });
-
-// Switch language by redirecting GTranslate URL
-document.querySelectorAll('.language-options .lang').forEach(item => {
-  item.addEventListener('click', () => {
-    const lang = item.dataset.lang; // 'en', 'hi', 'mr'
-    // Use GTranslate "gtranslate_url" redirect
-    if (lang === 'en') {
-      window.location.href = '/'; // English = default
-    } else if (lang === 'hi') {
-      window.location.href = '/?lang=hi';
-    } else if (lang === 'mr') {
-      window.location.href = '/?lang=mr';
-    }
-    options.style.display = 'none';
-  });
-});
-
 </script>
 
-<!-- GTRANSLATE WIDGET -->
-<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-<script>
-window.gtranslateSettings = {
-  default_language: "en",
-  languages: ["en","mr","hi"],
-  wrapper_selector: ".gtranslate_wrapper"
-};
-</script>
+<style>
+/* hide default select visually, but keep it functional */
+.gtranslate_wrapper select {
+  opacity: 0;
+  position: absolute;
+  top: -9999px;
+}
+</style>
 
 </body>
 </html>
-
