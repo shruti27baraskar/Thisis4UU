@@ -72,15 +72,8 @@ button {
   transition: all 0.3s ease;
 }
 
-#yes {
-  background: #ff66aa;
-  color: white;
-}
-
-#no {
-  background: #ffd6e6;
-  color: #ff0066;
-}
+#yes { background: #ff66aa; color: white; }
+#no { background: #ffd6e6; color: #ff0066; }
 
 /* ---------- HEARTS ---------- */
 .heart {
@@ -118,9 +111,7 @@ button {
   transition: transform 0.2s;
 }
 
-.globe:hover {
-  transform: scale(1.2);
-}
+.globe:hover { transform: scale(1.2); }
 
 .language-options {
   display: none;
@@ -143,16 +134,10 @@ button {
   transition: background 0.2s;
 }
 
-.language-options .lang:hover {
-  background: #ff85c1;
-}
+.language-options .lang:hover { background: #ff85c1; }
 
-/* hide default GTranslate dropdown */
-.gtranslate_wrapper select {
-  opacity: 0;
-  position: absolute;
-  left: -9999px;
-}
+/* hide default GTranslate dropdown & button completely */
+.gtranslate_wrapper { display: none !important; }
 </style>
 </head>
 <body>
@@ -202,11 +187,10 @@ const screen1 = document.getElementById("screen1");
 const screen2 = document.getElementById("screen2");
 
 let noCount = 0;
-
 noBtn.addEventListener("click", () => {
   if (noCount < 5) {
     noCount++;
-    yesBtn.style.transform = `scale(${1 + noCount * 0.2})`;
+    yesBtn.style.transform = `scale(${1 + noCount*0.2})`;
   }
 });
 
@@ -220,9 +204,9 @@ function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
   heart.innerHTML = "💖";
-  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.left = Math.random()*window.innerWidth+"px";
   heart.style.bottom = "0px";
-  heart.style.fontSize = Math.random() * 30 + 20 + "px";
+  heart.style.fontSize = Math.random()*30 + 20 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 5000);
 }
@@ -232,12 +216,10 @@ const globe = document.querySelector('.globe');
 const options = document.querySelector('.language-options');
 const gwrap = document.querySelector('.gtranslate_wrapper');
 
-// Toggle dropdown
 globe.addEventListener('click', () => {
   options.style.display = options.style.display === 'block' ? 'none' : 'block';
 });
 
-// Handle language selection
 document.querySelectorAll('.language-options .lang').forEach(item => {
   item.addEventListener('click', () => {
     const lang = item.dataset.lang;
