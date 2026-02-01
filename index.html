@@ -100,6 +100,38 @@ button {
     opacity: 0;
   }
 }
+  .custom-language-switcher {
+  position: fixed;
+  top: 20px; /* distance from top */
+  right: 20px; /* distance from right */
+  background-color: #ff4081; /* pink-ish matching your hearts */
+  color: white;
+  border-radius: 25px;
+  padding: 10px 15px;
+  font-family: sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 9999; /* stays on top */
+  transition: transform 0.2s;
+}
+
+.custom-language-switcher:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* Optional: hide default dropdown arrow and style options */
+.gtranslate_wrapper select {
+  background: transparent;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  appearance: none;
+  padding: 5px;
+}
+
 </style>
 </head>
 
@@ -163,7 +195,7 @@ function createHeart() {
   }, 5000);
 }
 </script>
-<div class="gtranslate_wrapper"></div>
+<div class="gtranslate_wrapper custom-language-switcher"></div>
 <script>
 window.gtranslateSettings = {
   "default_language":"en",
@@ -177,4 +209,5 @@ window.gtranslateSettings = {
 
 </body>
 </html>
+
 
