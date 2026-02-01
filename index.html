@@ -91,21 +91,16 @@ button {
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-600px) scale(2);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-600px) scale(2); opacity: 0; }
 }
-  .language-menu {
+
+/* ---------- LANGUAGE GLOBE ---------- */
+.language-menu {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 9999;
-  cursor: pointer;
   font-family: sans-serif;
 }
 
@@ -120,11 +115,12 @@ button {
   align-items: center;
   color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
   transition: transform 0.2s;
 }
 
 .globe:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .language-options {
@@ -137,6 +133,7 @@ button {
   padding: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   text-align: center;
+  animation: fadeIn 0.3s ease;
 }
 
 .language-options .lang {
@@ -151,6 +148,10 @@ button {
   background: #ff85c1;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 </style>
 </head>
@@ -174,47 +175,7 @@ button {
   <div class="image second-img"></div>
 </div>
 
-<script>
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-const screen1 = document.getElementById("screen1");
-const screen2 = document.getElementById("screen2");
-
-let noCount = 0;
-
-// NO BUTTON → YES grows (max 5 times)
-noBtn.addEventListener("click", () => {
-  if (noCount < 5) {
-    noCount++;
-    yesBtn.style.transform = `scale(${1 + noCount * 0.2})`;
-  }
-});
-
-// YES BUTTON → SWITCH PAGE + LOTS OF HEARTS
-yesBtn.addEventListener("click", () => {
-  screen1.classList.remove("active");
-  screen2.classList.add("active");
-
-  // MASSIVE HEART SURPRISE
-  setInterval(createHeart, 100);
-});
-
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "💖";
-
-  heart.style.left = Math.random() * window.innerWidth + "px";
-  heart.style.bottom = "0px";
-  heart.style.fontSize = Math.random() * 30 + 20 + "px";
-
-  document.body.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 5000);
-}
-</script>
+<!-- LANGUAGE GLOBE -->
 <div class="language-menu">
   <div class="globe">🌐</div>
   <div class="language-options">
@@ -225,24 +186,39 @@ function createHeart() {
 </div>
 
 <script>
-window.gtranslateSettings = {
-  "default_language":"en",
-  "languages":["en","mr","hi"],
-  "wrapper_selector":".gtranslate_wrapper",
-  "switcher_horizontal_position":"right",
-  "switcher_vertical_position":"top"
-}
-</script>
-<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-<script>
-window.gtranslateSettings = {
-  "default_language":"en",
-  "languages":["en","mr","hi"],
-  "wrapper_selector":".gtranslate_wrapper"
-};
+// ---------------- HEARTS + SCREENS ----------------
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const screen1 = document.getElementById("screen1");
+const screen2 = document.getElementById("screen2");
 
-// Toggle the options popup
+let noCount = 0;
+
+noBtn.addEventListener("click", () => {
+  if (noCount < 5) {
+    noCount++;
+    yesBtn.style.transform = `scale(${1 + noCount * 0.2})`;
+  }
+});
+
+yesBtn.addEventListener("click", () => {
+  screen1.classList.remove("active");
+  screen2.classList.add("active");
+  setInterval(createHeart, 100);
+});
+
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.bottom = "0px";
+  heart.style.fontSize = Math.random() * 30 + 20 + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}
+
+// ---------------- LANGUAGE GLOBE ----------------
 const globe = document.querySelector('.globe');
 const options = document.querySelector('.language-options');
 
@@ -250,22 +226,31 @@ globe.addEventListener('click', () => {
   options.style.display = options.style.display === 'block' ? 'none' : 'block';
 });
 
-// Handle language selection
+// Use GTranslate's iframe to switch languages
 document.querySelectorAll('.language-options .lang').forEach(item => {
   item.addEventListener('click', () => {
     const lang = item.dataset.lang;
     const frame = document.querySelector('iframe.goog-te-menu-frame');
     if (frame) {
-      frame.contentWindow.document.querySelector(`.goog-te-menu2-item span:textEquals("${lang === 'en' ? 'English' : lang === 'hi' ? 'Hindi' : 'Marathi'}")`)?.click();
+      const spanText = lang === 'en' ? 'English' : lang === 'hi' ? 'Hindi' : 'Marathi';
+      const span = [...frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span')]
+                    .find(s => s.textContent.includes(spanText));
+      if (span) span.click();
     }
     options.style.display = 'none';
   });
 });
 </script>
 
+<!-- GTRANSLATE WIDGET -->
+<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+<script>
+window.gtranslateSettings = {
+  default_language: "en",
+  languages: ["en","mr","hi"],
+  wrapper_selector: ".gtranslate_wrapper"
+};
+</script>
 
 </body>
 </html>
-
-
-
