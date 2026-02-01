@@ -219,6 +219,7 @@ function createHeart() {
 }
 
 // ---------------- LANGUAGE GLOBE ----------------
+// Toggle popup
 const globe = document.querySelector('.globe');
 const options = document.querySelector('.language-options');
 
@@ -226,20 +227,22 @@ globe.addEventListener('click', () => {
   options.style.display = options.style.display === 'block' ? 'none' : 'block';
 });
 
-// Use GTranslate's iframe to switch languages
+// Switch language by redirecting GTranslate URL
 document.querySelectorAll('.language-options .lang').forEach(item => {
   item.addEventListener('click', () => {
-    const lang = item.dataset.lang;
-    const frame = document.querySelector('iframe.goog-te-menu-frame');
-    if (frame) {
-      const spanText = lang === 'en' ? 'English' : lang === 'hi' ? 'Hindi' : 'Marathi';
-      const span = [...frame.contentWindow.document.querySelectorAll('.goog-te-menu2-item span')]
-                    .find(s => s.textContent.includes(spanText));
-      if (span) span.click();
+    const lang = item.dataset.lang; // 'en', 'hi', 'mr'
+    // Use GTranslate "gtranslate_url" redirect
+    if (lang === 'en') {
+      window.location.href = '/'; // English = default
+    } else if (lang === 'hi') {
+      window.location.href = '/?lang=hi';
+    } else if (lang === 'mr') {
+      window.location.href = '/?lang=mr';
     }
     options.style.display = 'none';
   });
 });
+
 </script>
 
 <!-- GTRANSLATE WIDGET -->
@@ -254,3 +257,4 @@ window.gtranslateSettings = {
 
 </body>
 </html>
+
